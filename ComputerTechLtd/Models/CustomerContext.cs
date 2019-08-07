@@ -8,6 +8,8 @@ namespace ComputerTechLtd.Models
 {
     public class CustomerContext : DbContext
     {
+        internal object orderitemEntity;
+
         public CustomerContext() : base("DbConnection")
         {
 

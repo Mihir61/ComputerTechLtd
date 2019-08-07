@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ComputerTechLtd.Models.Customer>
+﻿@model IEnumerable<ComputerTechLtd.Models.OrderItem>
 
 @{
     ViewBag.Title = "Index";
@@ -12,13 +12,19 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.OrderId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Address)
+            @Html.DisplayNameFor(model => model.ProductId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhoneNo)
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.LastUpdate)
@@ -32,13 +38,19 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.OrderId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Address)
+            @Html.DisplayFor(modelItem => item.ProductId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PhoneNo)
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UnitPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.LastUpdate)
