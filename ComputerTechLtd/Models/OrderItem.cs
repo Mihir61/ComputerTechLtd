@@ -10,9 +10,13 @@ namespace ComputerTechLtd.Models
     public class OrderItem : BaseEntity
     {
         public int OrderId { get; set; }
-        public int ProductId { get; set; }
+       
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
         public double Total { get; set; }
+
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
     }
 }

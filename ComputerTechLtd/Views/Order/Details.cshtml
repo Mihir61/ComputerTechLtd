@@ -1,0 +1,89 @@
+﻿@model ComputerTechLtd.Models.OrderModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <br />
+        <br />
+        <br />
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="4" class="text-center alert-info">Order</td>
+            </tr>
+            <tr>
+                <td> @Html.LabelFor(model => model.CustomerId, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+                <td>
+                    @Html.DisplayFor(model => model.Customer.Name)
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.LastUpdate, htmlAttributes: new { @class = "control-label col-md-2" })
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.LastUpdate)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-center alert-success">Order Items</td>
+            </tr>
+            <tr class="text-center">
+                <td> Product </td>
+                <td>Qty</td>
+                <td>Unit Price</td>
+                <td>Total</td>
+            </tr>
+
+            @foreach(var item in Model.OrderItemList)
+            {
+                <tr>
+                    <td>  @Html.DisplayFor(model => item.Product.ProductName)</td>
+                    <td> @Html.DisplayFor(model => item.Quantity)</td>
+                    <td> @Html.DisplayFor(model => item.UnitPrice)</td>
+                    <td> @Html.DisplayFor(model => item.Total)</td>
+                </tr>
+            }
+        <tr>
+            <td colspan="3" class="text-center">
+                Total
+            </td>
+
+            <td>
+                @{
+                    var total = 0;
+                    foreach (var item in Model.OrderItemList)
+                    {
+                        total += (int)(item.UnitPrice * item.Quantity);
+                    }
+                }
+
+                @(total)
+            </td>
+        </tr>
+            <tr>
+                <td>@Html.ActionLink("Back to List", "Index")</td>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+    </div>
+
+}
+
+<div>
+
+</div>
+
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,59 +1,150 @@
-﻿@model ComputerTechLtd.Models.Order
+﻿@model ComputerTechLtd.Models.OrderModel
 
 @{
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Order</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.OrderNo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.OrderNo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <br />
+        <br />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CustomerId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CustomerId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.LastUpdate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LastUpdate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastUpdate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="5" class="text-center alert-info">Order</td>
+            </tr>
+            <tr>
+                <td> @Html.LabelFor(model => model.CustomerId, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+                <td>
+                    @Html.DropDownListFor(model => model.CustomerId, new SelectList(Model.CustomerList, "Id", "Name"), "Choose--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.LastUpdate, htmlAttributes: new { @class = "control-label col-md-2" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.LastUpdate, new { @class = "form-control", @Value = "", @type = "date" })
+                    @Html.ValidationMessageFor(model => model.LastUpdate, "", new { @class = "text-danger" })
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-center alert-success">Order Items</td>
+            </tr>
+            <tr class="text-center">
+                <td> Product </td>
+                <td>Qty</td>
+                <td>Unit Price</td>
+                <td>Total</td>
+                <td>Action</td>
+            </tr>
+            <tbody id="itemTbody">
+                <tr>
+                    <td>
+                        @Html.DropDownListFor(model => model.OrderItemList[0].ProductId, new SelectList(Model.ProductList, "Id", "ProductName"), "Choose--",
+                       new { @class = "form-control", @onchange = "ProductRateLoad(this)" })
+                    </td>
+                    <td> @Html.TextBoxFor(model => model.OrderItemList[0].Quantity, new { @class = "form-control", @onkeyup = "TotalCalculation(this)" })</td>
+                    <td> @Html.TextBoxFor(model => model.OrderItemList[0].UnitPrice, new { @class = "form-control", @onkeyup = "TotalCalculationUP(this)" })</td>
+                    <td> @Html.TextBoxFor(model => model.OrderItemList[0].Total, new { @class = "form-control", @readonly = "readonly" })</td>
+                </tr>
+            </tbody>
+           
+               
+           
+            <tr>
+                <td colspan="3" class="text-center">
+                    Total
+                </td>
+                <td>@Html.TextBox("Total", 0, new { @class = "form-control", @readonly = "readonly" })</td>
+                <td><a onclick="AddNewRowFunc()" class="btn btn-success"><i class="glyphicon glyphicon-plus-sign"></i></a></td>
+            </tr>
+            <tr>
+                <td>@Html.ActionLink("Back to List", "Index")</td>
+                <td colspan="2"></td>
+                <td><button type="submit" class="btn btn-success">Save</button></td>
+            </tr>
+        </table>
     </div>
+
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+
 </div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function ProductRateLoad(obj) {
+            var value = $(obj).val();
+            var url = '@Url.Action("GetProductPriceById","Product")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ id: value }),
+                success: function (response)
+                {
+                   $(obj).closest('tr').find('input[name$=".UnitPrice"]').val(response.price);
+
+                },
+                error: function (response) {
+                    alert('Error');
+                }
+            });
+         }
+
+        function TotalCalculation(obj)
+        {
+            var qty = $(obj).val();
+            var unitPrice = $(obj).closest('tr').find('input[name$=".UnitPrice"]').val();
+            var total = (isNaN(parseFloat(qty)) ? 0 : parseFloat(qty)) * (isNaN(parseFloat(unitPrice)) ? 0 : parseFloat(unitPrice));
+            $(obj).closest('tr').find('input[name$=".Total"]').val(total);
+            GrandTotal();
+        }
+        function TotalCalculationUP(obj)
+        {
+            var unitPrice = $(obj).val();
+            var qty = $(obj).closest('tr').find('input[name$=".Quantity"]').val();
+            var total = (isNaN(parseFloat(qty)) ? 0 : parseFloat(qty)) * (isNaN(parseFloat(unitPrice)) ? 0 : parseFloat(unitPrice));
+            $(obj).closest('tr').find('input[name$=".Total"]').val(total);
+            GrandTotal();
+        }
+
+        function GrandTotal()
+        {
+            var total = 0;
+            $(document).find('input[name$=".Total"]').each(
+                function ()
+                {
+                    var value = $(this).val();
+                    total += (isNaN(parseFloat(value)) ? 0 : parseFloat(value));
+                }
+            )
+            $("#Total").val(total);
+    }
+    function AddNewRowFunc()
+    {
+        var countTr = $("#itemTbody").find('tr').length;
+        console.log(countTr);
+        $('#itemTbody').append('<tr><td><select class="form-control" data-val="true" data-val-number="The field ProductId must be a number." data-val-required="The ProductId field is required." id="OrderItemList_'+countTr+'__ProductId" name="OrderItemList['+countTr+'].ProductId" onchange="ProductRateLoad(this)"><option value="">Choose--</option><option value="1">HDD</option><option value="2">RAM</option><option value="3">Pen Drive</option></select>'+
+                    '</td>'+
+                    '<td><input class="form-control" data-val="true" data-val-number="The field Quantity must be a number." data-val-required="The Quantity field is required." id="OrderItemList_'+countTr+'__Quantity" name="OrderItemList['+countTr+'].Quantity" onkeyup="TotalCalculation(this)" type="text" value="0"></td>'+
+                    '<td><input class="form-control" data-val="true" data-val-number="The field UnitPrice must be a number." data-val-required="The UnitPrice field is required." id="OrderItemList_'+countTr+'__UnitPrice" name="OrderItemList['+countTr+'].UnitPrice" onkeyup="TotalCalculationUP(this)" type="text" value="0"></td>'+
+                    '<td><input class="form-control" data-val="true" data-val-number="The field Total must be a number." data-val-required="The Total field is required." id="OrderItemList_'+countTr+'__Total" name="OrderItemList['+countTr+'].Total" readonly="readonly" type="text" value="0"></td>'+
+                '</tr>')
+    }
+
+    </script>
+
+}

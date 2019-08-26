@@ -64,7 +64,7 @@ namespace ComputerTechLtd.Controllers
             return View(customer);
         }
 
-        public ActionResult Detail(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {

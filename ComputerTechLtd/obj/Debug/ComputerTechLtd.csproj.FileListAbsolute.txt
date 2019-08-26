@@ -156,9 +156,9 @@ C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\bin\Newtonsoft.Json.xml
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\bin\Antlr3.Runtime.pdb
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.csprojAssemblyReference.cache
-C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.Migrations.initial.resources
-C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.csproj.GenerateResource.cache
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.csproj.CoreCompileInputs.cache
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.csproj.CopyComplete
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.dll
 C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.pdb
+C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.Migrations.final.resources
+C:\Users\User\Desktop\ComputerTechLtd\ComputerTechLtd\obj\Debug\ComputerTechLtd.csproj.GenerateResource.cache
